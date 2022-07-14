@@ -1,3 +1,3 @@
-# {{APP_NAME}}
+# new-awesome-app
 
-NodeJS/Express {{APP_NAME}} repository.
+NodeJS/Express new-awesome-app repository.
