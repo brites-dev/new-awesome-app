@@ -1,0 +1,31 @@
+name: CI
+
+on: [push]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: OTCMarketsGroup/pipelines/.github/actions/pipelines/ci@main
+      with:
+        app-name: ${{ github.event.repository.name }}
+        runtime: nodejs
+        artifacts-bucket: otc-artifacts-github-action-tests
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: ci
+    if: ${{ success() && github.ref_protected != 'true' }}
+    concurrency: 
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+    - uses: OTCMarketsGroup/pipelines/.github/actions/pipelines/deploy@main
+      with:
+        app-name: ${{ github.event.repository.name }}
+        runtime: nodejs
+        environment: ${{ secrets.ENVIRONMENT }}
+        selected-environment: dev
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        default: test
+        description: Environment to deploy to
+        type: environment
+      version:
+        required: true
+        description: Version to deploy (can be a branch name or a tag)
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+    - uses: OTCMarketsGroup/pipelines/.github/actions/pipelines/deploy@main
+      with:
+        app-name: ${{ github.event.repository.name }}
+        runtime: nodejs
+        environment: ${{ secrets.ENVIRONMENT }}
+        selected-environment: ${{ inputs.environment }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        version: ${{ inputs.version }}

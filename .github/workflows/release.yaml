@@ -1,0 +1,21 @@
+name: Release
+
+on: [workflow_dispatch]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: OTCMarketsGroup/pipelines/.github/actions/pipelines/release@main
+      with:
+        adt-jira: ADT-123 # ${{ inputs.adt-jira }}
+        app-name: ${{ github.event.repository.name }}
+        runtime: nodejs
+        artifacts-bucket: otc-artifacts-github-action-tests
+        artifacts-path: './'
+        environment: ${{ secrets.ENVIRONMENT }}
+        jira-project-name: ASAPI
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        veracode-id: ${{ secrets.VERACODE_ID }}
+        veracode-key: ${{ secrets.VERACODE_KEY }}
