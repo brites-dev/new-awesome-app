@@ -1,5 +1,5 @@
 {
-  "name": "{{APP_NAME}}",
+  "name": "new-awesome-app",
   "version": "0.0.0",
   "private": true,
   "scripts": {
